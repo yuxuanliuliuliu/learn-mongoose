@@ -11,7 +11,7 @@ export interface IBookInstance extends Document {
 
 export interface IBookInstanceModel extends Model<IBookInstance> {
   getBookDetails(id: string): Promise<IBookInstance[]>;
-  getAllBookStatuses(): string[];
+  getAllBookStatuses(): Promise<string[]>;
 }
 
 var BookInstanceSchema: Schema<IBookInstance> = new Schema(
