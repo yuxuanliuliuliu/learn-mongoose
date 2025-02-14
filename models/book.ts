@@ -11,16 +11,31 @@ export interface IBook extends Document {
   genre: IGenre[];
 }
 
-var BookSchema: Schema<IBook> = new Schema(
+interface IBookModel extends Model<IBook> {
+  getBook(id: string): Promise<IBook | null>;
+  getAllBooks(): Promise<IBook[]>;
+}
+
+const BookSchema: Schema<IBook> = new Schema(
   {
-    title: {type: String, required: true},
-    author: {type: Schema.Types.ObjectId, ref: 'Author', required: true},
-    summary: {type: String, required: true},
-    isbn: {type: String, required: true},
-    genre: [{type: Schema.Types.ObjectId, ref: 'Genre'}]
+    title: { type: String, required: true },
+    author: { type: Schema.Types.ObjectId, ref: 'Author', required: true },
+    summary: { type: String, required: true },
+    isbn: { type: String, required: true },
+    genre: [{ type: Schema.Types.ObjectId, ref: 'Genre' }]
   }
 );
 
+BookSchema.statics.getBook = async function (id: string): Promise<IBook | null> {
+  return this.findById(id).populate('author').populate('genre').exec();
+}
+
+BookSchema.statics.getAllBooks = async function (): Promise<IBook[]> {
+  return Book.find({}, 'title author')
+    .sort({ title: 1 })  // 1 indicates ascending order
+    .populate('author');
+}
+
 // Export the model
-const Book: Model<IBook> = mongoose.model<IBook>('Book', BookSchema);
+const Book = mongoose.model<IBook, IBookModel>('Book', BookSchema);
 export default Book;

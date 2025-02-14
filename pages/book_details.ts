@@ -1,27 +1,14 @@
 import { Response } from 'express';
-import Book, { IBook }  from '../models/book';
+import Book  from '../models/book';
 import BookInstance, { IBookInstance }  from '../models/bookinstance';
 
-
-// Function to get a book by ID
-async function getBook(id: string): Promise<IBook | null> {
-  if (typeof id !== 'string') {
-    return null;
-  }
-  return Book.findOne({ _id: id }).populate('author').exec();
-}
-
-// Function to get book details
-async function getBookDtl(id: string): Promise<IBookInstance[]> {
-  return BookInstance.find({ book: id }).select('imprint status').exec();
-}
 
 // Function to handle showing book details
 export const showBookDtls = async (res: Response, id: string): Promise<void> => {
   try {
     const [book, copies] = await Promise.all([
-      getBook(id),
-      getBookDtl(id)
+      Book.getBook(id),
+      BookInstance.getBookDetails(id)
     ]);
 
     if (!book) {
@@ -35,6 +22,7 @@ export const showBookDtls = async (res: Response, id: string): Promise<void> => 
       copies: copies
     });
   } catch (err) {
+    console.error('Error fetching book:', err);
     res.status(500).send(`Error fetching book ${id}`);
   }
 };
