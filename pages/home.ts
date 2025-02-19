@@ -1,18 +1,20 @@
+import express from 'express';
 import { Response } from 'express';
 import Book from '../models/book';
 import Author from '../models/author';
 import BookInstance from '../models/bookinstance';
 import Genre from '../models/genre';
 
-export async function show_home(res: Response): Promise<void> {
-  try {
-    const booksCount = await Book.countDocuments({});
-    const copiesCount = await BookInstance.countDocuments({});
-    const availableCount = await BookInstance.countDocuments({ status: 'Available' });
-    const authorsCount = await Author.countDocuments({});
-    const genresCount = await Genre.countDocuments({});
+const router = express.Router();
 
-    const msg = `
+async function show_home(): Promise<string> {
+  const booksCount = await Book.getBookCount();
+  const copiesCount = await BookInstance.getBookInstanceCount();
+  const availableCount = await BookInstance.getBookInstanceCount({ status: 'Available' });
+  const authorsCount = await Author.getAuthorCount();
+  const genresCount = await Genre.getGenreCount();
+
+  const msg = `
       <div>
         <p>Books: ${booksCount}</p>
         <p>Copies: ${copiesCount}</p>
@@ -21,8 +23,17 @@ export async function show_home(res: Response): Promise<void> {
         <p>Genres: ${genresCount}</p>
       </div>
     `;
+  return msg;
+}
+
+router.get('/stats', async (_, res: Response) => {
+  try {
+    const msg = await show_home();
     res.send(msg);
-  } catch (err: unknown) {
+  }
+  catch (err: unknown) {
     res.status(500).send('Error retrieving home data: ' + (err as Error).message);
   }
-}
+});
+
+export default router;

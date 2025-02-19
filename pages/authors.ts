@@ -1,23 +1,12 @@
-import { Request, Response } from 'express';
-import Author, { IAuthor } from '../models/author';
+import { Response } from 'express';
+import Author from '../models/author';
+import express from 'express';
 
-// Function to get the list of authors
-const getAuthorList = async (): Promise<string[]> => {
-  try {
-    const authorsList: IAuthor[] = await Author.find()
-      .sort([['family_name', 'ascending']]);
-      
-    return authorsList.map(author => `${author.name} : ${author.lifespan}`);
-  } catch (error) {
-    console.error('Error fetching authors:', error);
-    return [];
-  }
-};
+const router = express.Router();
 
-// Function to handle the request and respond with author list
-export const showAllAuthors = async (res: Response): Promise<void> => {
+router.get('/', async (_, res: Response) => {
   try {
-    const data: string[] = await getAuthorList();
+    const data: string[] = await Author.getAllAuthors({ family_name: 1 });
     if (data.length > 0) {
       res.send(data);
     } else {
@@ -27,4 +16,6 @@ export const showAllAuthors = async (res: Response): Promise<void> => {
     console.error('Error processing request:', error);
     res.send('No authors found');
   }
-};
+});
+
+export default router;

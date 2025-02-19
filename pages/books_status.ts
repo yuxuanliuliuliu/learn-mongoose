@@ -1,8 +1,10 @@
 import { Response } from 'express';
 import BookInstance, { IBookInstance } from '../models/bookinstance';
+import express from 'express';
 
-// Function to show all books with status "Available"
-export const showAllBooksStatus = async (res: Response): Promise<void> => {
+const router = express.Router();
+
+router.get('/', async (_, res: Response) => {
   try {
     const results = await BookInstance.getAllBookStatuses();
     res.status(200).send(results);
@@ -10,4 +12,6 @@ export const showAllBooksStatus = async (res: Response): Promise<void> => {
   catch (err) {
     res.status(500).send('Status not found');
   }
-};
+});
+
+export default router;

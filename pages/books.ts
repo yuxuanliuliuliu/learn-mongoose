@@ -1,9 +1,12 @@
 import Book from '../models/book';
 import Author from '../models/author';
+import express from 'express';
 
-export const showBooks = async (): Promise<string[] | void> => {
+const router = express.Router();
+
+const showBooks = async (): Promise<string[] | void> => {
   try {
-    const books = await Book.getAllBooks();
+    const books = await Book.getAllBooksWithAuthors('title author', {title: 1});
     return books.map((b) => {
       const authorName = new Author(b.author).name; // Assuming 'Author' returns the author's name
       return `${b._id} : ${b.title} : ${authorName}`;
@@ -12,3 +15,14 @@ export const showBooks = async (): Promise<string[] | void> => {
     console.log('Could not get books ' + err);
   }
 }
+
+router.get('/', async (_, res) => {
+  try {
+    const data = await showBooks();
+    res.send(data);
+  } catch {
+    res.send('No books found');
+  }
+});
+
+export default router;

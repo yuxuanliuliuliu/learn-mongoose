@@ -1,10 +1,13 @@
 import { Response } from 'express';
 import Book  from '../models/book';
 import BookInstance, { IBookInstance }  from '../models/bookinstance';
+import express from 'express';
+
+const router = express.Router();
 
 
-// Function to handle showing book details
-export const showBookDtls = async (res: Response, id: string): Promise<void> => {
+router.get('/', async (req, res) => {
+  const id = req.query.id as string;
   try {
     const [book, copies] = await Promise.all([
       Book.getBook(id),
@@ -25,4 +28,6 @@ export const showBookDtls = async (res: Response, id: string): Promise<void> => 
     console.error('Error fetching book:', err);
     res.status(500).send(`Error fetching book ${id}`);
   }
-};
+});
+
+export default router;

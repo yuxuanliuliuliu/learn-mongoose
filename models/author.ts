@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
+import mongoose, { Schema, Document, Model, FilterQuery } from 'mongoose';
 
 // Define an interface for the Author document
 export interface IAuthor extends Document {
@@ -8,6 +8,12 @@ export interface IAuthor extends Document {
   date_of_death?: Date;
   name: string;
   lifespan: string;
+}
+
+interface IAuthorModel extends Model<IAuthor> {
+  getAuthorCount(filter?: FilterQuery<IAuthor>): Promise<number>;
+  getAllAuthors(sortOpts?: { [key: string]: 1 | -1 }): Promise<string[]>;
+  getAuthorIdByName(family_name: string, first_name: string): Promise<mongoose.Types.ObjectId | null>; 
 }
 
 var AuthorSchema: Schema<IAuthor> = new Schema(
@@ -48,6 +54,27 @@ AuthorSchema.virtual('lifespan').get(function() {
   return lifetime_string;
 });
 
+AuthorSchema.statics.getAuthorCount = async function (filter?: FilterQuery<IAuthor>): Promise<number> {
+  return this.countDocuments(filter || {});
+}
+
+AuthorSchema.statics.getAllAuthors = async function (sortOpts?: { [key: string]: 1 | -1 }): Promise<string[]> {
+  let authorsList: IAuthor[] = [];
+  if(sortOpts) {
+    authorsList = await Author.find().sort(sortOpts);
+  }
+  authorsList = await Author.find();
+  return authorsList.map(author => `${author.name} : ${author.lifespan}`);
+}
+
+AuthorSchema.statics.getAuthorIdByName = async function (family_name: string, first_name: string): Promise<mongoose.Types.ObjectId | null> {
+  const author = await this.findOne({ family_name: family_name, first_name: first_name });
+  if (!author) {
+    return null;
+  }
+  return author._id;
+}
+
 // Export the model
-const Author: Model<IAuthor> = mongoose.model<IAuthor>('Author', AuthorSchema);
+const Author = mongoose.model<IAuthor, IAuthorModel>('Author', AuthorSchema);
 export default Author;
