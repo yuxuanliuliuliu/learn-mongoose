@@ -30,6 +30,8 @@ book author's name, and the book instances for the book. Every book instance mus
 Verify the behavior by clicking on the book details button for a book in
 `library_ui`.
 
+You can access the relevant queries documentation from [here](https://mongoosejs.com/docs/queries.html) and [here](https://mongoosejs.com/docs/populate.html)
+
 # References
 
 1. https://mongoosejs.com/docs/index.html
