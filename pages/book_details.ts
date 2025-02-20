@@ -9,7 +9,7 @@ const router = express.Router();
  * @route GET /book_dtls
  * @group resource - the details of a book
  * @param {string} id.query - the book id
- * @returns an object with the book title, author and a list of copies
+ * @returns an object with the book title string, author name string, and an array of bookInstances
  * @returns 404 - if the book is not found
  * @returns 500 - if there is an error in the database
  */
