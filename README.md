@@ -2,6 +2,8 @@
 
 Run `npm install` to install all dependencies.
 
+Run `npx ts-node server.ts` to start the server.
+
 From `library-ui/` also run `npm install` to install client program, which will send REST requests to the server. We will use this client to test our server.
 
 ## Install MongoDB Locally
@@ -17,6 +19,16 @@ First we need to define the schemas for the MongoDB collections **models/**. We 
 At any point, we can delete all data in the database and start afresh by using the following command:
 
 `$ npx ts-node remove_db.ts "mongodb://127.0.0.1:27017/my_library_db"`.
+
+## Retrieve Details of a book
+
+Extend the server with a route `/book_dtls` to retrieve the details
+of a specific book. Assume that the ID of an existing book in the database will be passed as a query parameter (`req.query.id`). The route
+must respond with 200 status and an object with properties -- book title,
+book author's name, and the book instances for the book. Every book instance must have the properties imprint and status. 
+
+Verify the behavior by clicking on the book details button for a book in
+`library_ui`.
 
 # References
 

@@ -18,12 +18,10 @@ export interface IBookInstance extends Document {
 /**
  * @interface IBookInstanceModel - Interface representing the BookInstance model.
  * This interface extends the Mongoose Model interface and adds custom static methods.
- * @property {Function} getBookDetails - Static method to get book details by ID.
  * @property {Function} getAllBookStatuses - Static method to get all book statuses.
  * @property {Function} getBookInstanceCount - Static method to get the count of book instances.
  */
 export interface IBookInstanceModel extends Model<IBookInstance> {
-  getBookDetails(id: string, selectOptions?: string): Promise<IBookInstance[]>;
   getAllBookStatuses(): Promise<string[]>;
   getBookInstanceCount(filter?: FilterQuery<IBookInstance>): Promise<number>;
 }
@@ -36,22 +34,6 @@ var BookInstanceSchema: Schema<IBookInstance> = new Schema(
     due_back: { type: Date, default: Date.now }
   }
 );
-
-/**
- * Retrieves the details of a book by its ID. 
- * The details retrieved depend on the selectOptions parameter.
- * If selectOptions is provided, it will be used to select specific fields.
- * If selectOptions is not provided, it defaults to selecting the 'imprint' and 'status' fields.
- * @param id the book ID
- * @param selectOptions the fields to select
- * @returns a promise that resolves to an array of IBookInstance documents
- */
-BookInstanceSchema.statics.getBookDetails = async function (id: string, selectOptions?: string): Promise<IBookInstance[]> {
-  if(selectOptions) {
-    return BookInstance.find({ book: id }).select(selectOptions).exec();
-  }
-  return BookInstance.find({ book: id }).select('imprint status').exec();
-}
 
 /**
  * retrieves the title and status of all books that have status 'Available'
