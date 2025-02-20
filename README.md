@@ -4,7 +4,7 @@ Run `npm install` to install all dependencies.
 
 Run `npx ts-node server.ts` to start the server.
 
-From `library-ui/` also run `npm install` to install client program, which will send REST requests to the server. We will use this client to test our server.
+From `library-ui/` also run `npm install` to install client program, which will send REST requests to the server. We will use this client to test our server. You can run `npm start` from `library-ui/` to start the client after installing the dependencies.
 
 ## Install MongoDB Locally
 
