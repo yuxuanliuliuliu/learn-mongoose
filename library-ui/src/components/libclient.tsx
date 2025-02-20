@@ -12,9 +12,23 @@ interface Content {
   dtls: boolean;
 }
 
+/**
+ * A function to render the content received from the server.
+ * @returns The root component for the library client.
+ */
 export default function LibClient() {
+  // The intial state for the content is an empty array.
+  // The dtls is a boolean to show if the book details should be shown.
+  // The book details are only shown from the book list page.
   const [content, setContent] = useState<Content>({ data: [], dtls: false });
 
+  /**
+   * The function builds the URL for the request to be sent to the server.
+   * It also handles the response from the server and updates the component state.
+   * Updating the component state causes the component to be re-rendered with the new data from the server response.
+   * @param contentType 
+   * @param bookId 
+   */
   function handleContent(contentType: string, bookId: string = 'NA') {
     axios.get(makeUrl(contentType, bookId))
       .then(res => {

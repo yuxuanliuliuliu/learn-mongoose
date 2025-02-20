@@ -1,6 +1,14 @@
 import axios from 'axios';
 import { useState, ChangeEvent } from 'react';
 
+/**
+ * The component allows a user to add a new book.
+ * A book can only be added if the author and genre exist in the database.
+ * The component has four input boxes to get the family name and first name of the author,
+ * the name of the genre, and the title of the book.
+ * The component makes a POST request to the server with the details of the book.
+ * @returns a form to add a new book
+ */
 export default function AddBook() {
     const [authorFamilyName, setAuthorFamilyName] = useState<string>('');
     const [authorFirstName, setAuthorFirstName] = useState<string>('');
