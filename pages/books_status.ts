@@ -4,6 +4,11 @@ import express from 'express';
 
 const router = express.Router();
 
+/**
+ * @route GET /available
+ * @returns {object} 200 - An array of available books
+ * @returns {Error}  500 - if an error occurs when fetching the books
+ */
 router.get('/', async (_, res: Response) => {
   try {
     const results = await BookInstance.getAllBookStatuses();

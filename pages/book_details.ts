@@ -1,4 +1,3 @@
-import { Response } from 'express';
 import Book  from '../models/book';
 import BookInstance, { IBookInstance }  from '../models/bookinstance';
 import express from 'express';
@@ -6,6 +5,14 @@ import express from 'express';
 const router = express.Router();
 
 
+/**
+ * @route GET /book_dtls
+ * @group resource - the details of a book
+ * @param {string} id.query - the book id
+ * @returns an object with the book title, author and a list of copies
+ * @returns 404 - if the book is not found
+ * @returns 500 - if there is an error in the database
+ */
 router.get('/', async (req, res) => {
   const id = req.query.id as string;
   try {

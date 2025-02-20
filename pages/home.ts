@@ -7,6 +7,10 @@ import Genre from '../models/genre';
 
 const router = express.Router();
 
+/**
+ * 
+ * @returns HTML string with statistics about the count of books, copies, authors and genres
+ */
 async function show_home(): Promise<string> {
   const booksCount = await Book.getBookCount();
   const copiesCount = await BookInstance.getBookInstanceCount();
@@ -26,6 +30,11 @@ async function show_home(): Promise<string> {
   return msg;
 }
 
+/**
+ * @route GET /home/stats
+ * @returns the HTML string with statistics about the count of books, copies, authors and genres
+ * @returns 500 if an error occurs when retrieving the data
+ */
 router.get('/stats', async (_, res: Response) => {
   try {
     const msg = await show_home();

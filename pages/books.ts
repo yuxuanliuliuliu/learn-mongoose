@@ -4,6 +4,7 @@ import express from 'express';
 
 const router = express.Router();
 
+
 const showBooks = async (): Promise<string[] | void> => {
   try {
     const books = await Book.getAllBooksWithAuthors('title author', {title: 1});
@@ -15,7 +16,11 @@ const showBooks = async (): Promise<string[] | void> => {
     console.log('Could not get books ' + err);
   }
 }
-
+/**
+ * @route GET /books
+ * @returns an array of strings, where each string contains the book ID, title, and author name
+ * @returns - a message indicating that no books were found if an error occurs
+ */
 router.get('/', async (_, res) => {
   try {
     const data = await showBooks();
