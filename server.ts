@@ -6,7 +6,7 @@ import availableRouter from './pages/books_status';
 import bookRouter from './pages/books';
 import authorRouter from './pages/authors';
 import createBookRouter from './pages/create_book';
-
+import bookDetailRouter from './pages/book_detail';
 // Create express app
 const app = express();
 // Setup server port
@@ -45,3 +45,5 @@ app.use('/books', bookRouter);
 app.use('/authors', authorRouter);
 
 app.use('/newbook', createBookRouter);
+
+app.use('/book_dtls', bookDetailRouter);

@@ -22,6 +22,7 @@ export interface IBook extends Document {
   isbn: string;
   genre: IGenre[];
   saveBookOfExistingAuthorAndGenre(author_family_name: string, author_first_name: string, genre_name: string, title: string): Promise<IBook>;
+
 }
 
 /**
